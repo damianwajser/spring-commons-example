@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IdempontecyFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-commons-example</a> &gt; <a href="index.source.html" class="el_package">com.app.example.idempotency.filters</a> &gt; <span class="el_source">IdempontecyFilter.java</span></div><h1>IdempontecyFilter.java</h1><pre class="source lang-java linenums">package com.app.example.idempotency.filters;
+
+import com.app.example.idempotency.configuration.IdempotencyEndpoints;
+import com.app.example.idempotency.configuration.IdempotencyProperties;
+import com.app.example.idempotency.exception.ArgumentnotFoundException;
+import com.app.example.idempotency.utils.JsonUtils;
+import com.app.example.idempotency.writers.HttpServletResponseCopier;
+import com.github.damianwajser.exceptions.impl.badrequest.BadRequestException;
+import com.github.damianwajser.exceptions.impl.badrequest.ConflictException;
+import com.github.damianwajser.exceptions.model.ErrorMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.CharArrayWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+public class IdempontecyFilter implements Filter {
+
+<span class="fc" id="L32">	private static final Logger LOGGER = LoggerFactory.getLogger(IdempontecyFilter.class);</span>
+	public static final String LOCK = &quot;lock&quot;;
+
+	private IdempotencyProperties idempotencyProperties;
+	private RedisTemplate redisTemplate;
+	private final IdempotencyEndpoints idempotencyEndpoints;
+
+<span class="fc" id="L39">	public IdempontecyFilter(RedisTemplate redisTemplate, IdempotencyEndpoints idempotencyEndpoints, IdempotencyProperties properties) {</span>
+<span class="fc" id="L40">		Assert.notNull(redisTemplate, &quot;redisTemplate is required&quot;);</span>
+<span class="fc" id="L41">		Assert.notEmpty(idempotencyEndpoints.getUrlPatterns(), &quot;No Pattterns are configured&quot;);</span>
+<span class="fc" id="L42">		this.idempotencyProperties = properties;</span>
+<span class="fc" id="L43">		this.redisTemplate = redisTemplate;</span>
+<span class="fc" id="L44">		this.idempotencyEndpoints = idempotencyEndpoints;</span>
+<span class="fc" id="L45">	}</span>
+
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+<span class="fc" id="L49">		LOGGER.debug(&quot;IdempontecyFilter initialize&quot;);</span>
+<span class="fc" id="L50">	}</span>
+
+	@Override
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+			throws IOException, ServletException {
+
+<span class="fc" id="L56">		HttpServletRequest request = (HttpServletRequest) req;</span>
+<span class="fc" id="L57">		HttpServletResponse response = (HttpServletResponse) res;</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">		if (!request.getMethod().equalsIgnoreCase(HttpMethod.POST.name())) {</span>
+<span class="nc" id="L59">			chain.doFilter(request, response);</span>
+		} else {
+<span class="fc" id="L61">			executeIdempotency(chain, request, response);</span>
+		}
+<span class="fc" id="L63">	}</span>
+
+	private void executeIdempotency(FilterChain chain, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		try {
+<span class="fc" id="L67">			String key = getKey(request, this.idempotencyEndpoints);</span>
+<span class="fc" id="L68">			LOGGER.info(&quot;try lock request key: {}&quot;, key);</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">			if (redisTemplate.opsForValue().setIfAbsent(key, LOCK)) {</span>
+<span class="fc" id="L70">				excecuteRequest(chain, request, response, key);</span>
+			} else {
+<span class="fc" id="L72">				excecuteIdempotency(response, request, key);</span>
+			}
+<span class="fc" id="L74">		} catch (ArgumentnotFoundException e) {</span>
+<span class="fc" id="L75">			writeBadRequestMessage(response, request, e);</span>
+<span class="fc" id="L76">		}</span>
+<span class="fc" id="L77">	}</span>
+
+	private void excecuteRequest(FilterChain chain, HttpServletRequest request, HttpServletResponse response, String key) {
+<span class="fc" id="L80">		LOGGER.info(&quot;firts Time for these request, lock key: {}&quot;, key);</span>
+		try {
+<span class="fc" id="L82">			HttpServletResponseCopier responseCopier = new HttpServletResponseCopier(response);</span>
+<span class="fc" id="L83">			LOGGER.info(&quot;Call the real controller&quot;);</span>
+<span class="fc" id="L84">			chain.doFilter(request, responseCopier);</span>
+<span class="fc" id="L85">			byte[] copy = responseCopier.getCopy();</span>
+<span class="fc" id="L86">			String value = new String(copy);</span>
+<span class="fc" id="L87">			LOGGER.info(&quot;store request key: {} - value: {}&quot;, key, value);</span>
+<span class="fc" id="L88">			redisTemplate.opsForValue().set(key, value);</span>
+<span class="fc" id="L89">			LOGGER.info(&quot;set expiration - request key: {} ttl: &quot;, key);</span>
+<span class="fc" id="L90">			redisTemplate.expire(key, idempotencyProperties.getIdempotencyTtl(), TimeUnit.MINUTES);</span>
+<span class="nc" id="L91">		} catch (Exception e) {</span>
+<span class="nc" id="L92">			LOGGER.error(&quot;Error to save idempotency response in redis&quot;, e);</span>
+<span class="fc" id="L93">		}</span>
+<span class="fc" id="L94">	}</span>
+
+	private void excecuteIdempotency(HttpServletResponse response, HttpServletRequest request, String key) throws IOException, ServletException {
+		//non firts Time for these key
+<span class="fc" id="L98">		String previusResponse = (String) redisTemplate.opsForValue().get(key);</span>
+<span class="fc" id="L99">		LOGGER.info(&quot;retrive key: {} to cache, body: {}&quot;, key, previusResponse);</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		if (!previusResponse.equalsIgnoreCase(LOCK)) {</span>
+<span class="fc" id="L101">			writeResponse(response, previusResponse, true, HttpStatus.CREATED);</span>
+		} else {
+<span class="fc" id="L103">			writeLockMessage(response, request);</span>
+		}
+<span class="fc" id="L105">	}</span>
+
+	private void writeBadRequestMessage(HttpServletResponse response, HttpServletRequest request, ArgumentnotFoundException e) throws IOException, ServletException {
+		//Not key present bad request
+<span class="fc" id="L109">		ErrorMessage message = new BadRequestException(&quot;asd&quot;, e.getArgument() + &quot; Not Found&quot;, Optional.empty()).getErrorMessage(request);</span>
+<span class="fc" id="L110">		writeResponse(response, message, false, HttpStatus.BAD_REQUEST);</span>
+<span class="fc" id="L111">	}</span>
+
+	private void writeLockMessage(HttpServletResponse response, HttpServletRequest request) throws IOException, ServletException {
+		//its locked return 409 connflict idempotency
+<span class="fc" id="L115">		ErrorMessage message = new ConflictException(&quot;asd&quot;, &quot;Idempotency Connflict&quot;, Optional.empty()).getErrorMessage(request);</span>
+<span class="fc" id="L116">		writeResponse(response, message, false, HttpStatus.CONFLICT);</span>
+<span class="fc" id="L117">	}</span>
+
+
+	private String getKey(HttpServletRequest request, IdempotencyEndpoints idempotencyEndpoints) {
+<span class="fc" id="L121">		return idempotencyEndpoints.generateKey(request);</span>
+	}
+
+	private HttpServletResponseCopier writeResponse(HttpServletResponse response, Object message, boolean cached, HttpStatus status) throws IOException, ServletException {
+<span class="fc" id="L125">		HttpServletResponseCopier wrapper = new HttpServletResponseCopier(response);</span>
+<span class="fc" id="L126">		PrintWriter responseWriter = response.getWriter();</span>
+<span class="fc" id="L127">		CharArrayWriter charWriter = new CharArrayWriter();</span>
+<span class="fc" id="L128">		charWriter.write(new JsonUtils().objectToJsonString(message));</span>
+<span class="fc" id="L129">		String alteredContent = charWriter.toString();</span>
+<span class="fc" id="L130">		response.setContentLength(alteredContent.length());</span>
+<span class="fc" id="L131">		response.setStatus(status.value());</span>
+<span class="fc" id="L132">		response.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);</span>
+<span class="fc" id="L133">		response.setHeader(&quot;X-Idempotency&quot;, String.valueOf(cached));</span>
+<span class="fc" id="L134">		responseWriter.write(alteredContent);</span>
+<span class="fc" id="L135">		return wrapper;</span>
+	}
+
+
+	@Override
+	public void destroy() {
+		// empty
+<span class="nc" id="L142">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
