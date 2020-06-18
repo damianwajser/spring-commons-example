@@ -1,5 +1,7 @@
 package com.app.example.model;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.util.Objects;
 
 public class FooObject {
@@ -13,6 +15,26 @@ public class FooObject {
 	}
 
 	private String value;
+
+	public SerializationFeature getEnumExample() {
+		return enumExample;
+	}
+
+	public void setEnumExample(SerializationFeature enumExample) {
+		this.enumExample = enumExample;
+	}
+
+	private SerializationFeature enumExample;
+
+	public int getValue2() {
+		return value2;
+	}
+
+	public void setValue2(int value2) {
+		this.value2 = value2;
+	}
+
+	private int value2;
 
 	public FooObject() {
 	}
