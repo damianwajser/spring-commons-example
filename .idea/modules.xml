@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/spring-commons-example.iml" filepath="$PROJECT_DIR$/.idea/spring-commons-example.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-commons-example-basic/spring-commons-example-basic.iml" filepath="$PROJECT_DIR$/spring-commons-example-basic/spring-commons-example-basic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-commons-example-dynamo/spring-commons-example-dynamo.iml" filepath="$PROJECT_DIR$/spring-commons-example-dynamo/spring-commons-example-dynamo.iml" />
     </modules>
   </component>
 </project>

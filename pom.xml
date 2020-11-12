@@ -25,6 +25,7 @@
 	</properties>
 	<modules>
 		<module>spring-commons-example-basic</module>
+		<module>spring-commons-example-dynamo</module>
 	</modules>
 
 	<developers>

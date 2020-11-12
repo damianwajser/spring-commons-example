@@ -7,16 +7,19 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="spring-commons-example-basic" />
+        <module name="spring-commons-example-dynamo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="spring-commons-example" target="11" />
       <module name="spring-commons-example-basic" target="11" />
+      <module name="spring-commons-example-dynamo" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="spring-commons-example-basic" options="-parameters" />
+      <module name="spring-commons-example-dynamo" options="-parameters" />
     </option>
   </component>
 </project>
