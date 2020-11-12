@@ -1,7 +1,0 @@
-
-^
-java:S1874"<Remove this use of "AmazonDynamoDBClient"; it is deprecated.(úáÒ¾ûÿÿÿÿ8Õ»–÷Ù.
-Œ
-java:S1128"oRemove this unused import 'org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories'.(ò—²ã8ïô°÷Ù.
-P
-java:S1874"3Remove this use of "setEndpoint"; it is deprecated.(–™“8Õ»–÷Ù.
