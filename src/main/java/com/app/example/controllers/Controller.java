@@ -1,19 +1,14 @@
 package com.app.example.controllers;
 
-import java.util.Locale;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
-import com.app.example.model.FooObject;
 import com.github.damianwajser.exceptions.impl.badrequest.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
 
 @RestController
 public class Controller {

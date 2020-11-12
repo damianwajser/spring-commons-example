@@ -1,5 +1,0 @@
-com/app/example/tests/HttpStatusCodeTest.class
-com/app/example/tests/HttpHeaderTest.class
-com/app/example/tests/IdempotencyTest.class
-com/app/example/controllers/HttpHeadersController.class
-com/app/example/controllers/HttpStatusCodeController.class

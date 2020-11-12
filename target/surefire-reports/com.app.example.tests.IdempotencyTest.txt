@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.app.example.tests.IdempotencyTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.377 s - in com.app.example.tests.IdempotencyTest
