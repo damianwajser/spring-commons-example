@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.damianwajser:spring-commons-exception:1.15.6">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/damianwajser/spring-commons-exception/1.15.6/spring-commons-exception-1.15.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/damianwajser/spring-commons-exception/1.15.6/spring-commons-exception-1.15.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/damianwajser/spring-commons-exception/1.15.6/spring-commons-exception-1.15.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

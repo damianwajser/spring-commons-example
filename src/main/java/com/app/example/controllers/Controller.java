@@ -21,11 +21,6 @@ public class Controller {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	@Autowired
-	private ServiceCache service;
-
-	@Autowired
-	private MessageSource messageSource;
 
 	@GetMapping("/echo")
 	private Object test() {
@@ -36,26 +31,7 @@ public class Controller {
 
 	@GetMapping("/ex")
 	private Object testex() throws BadRequestException {
-		String t = messageSource.getMessage("message1", new Object[]{}, "message", Locale.US);
 		throw new BadRequestException("", "${message}", Optional.empty());
-	}
-
-	@GetMapping("/echo1")
-	private Object echo() {
-		LOGGER.info("echo1");
-		return new FooObject("asdasd");
-	}
-	@GetMapping("/cache")
-	private Object echo1() {
-		LOGGER.info("echo1");
-		return service.getAlgo();
-	}
-
-
-	@PostMapping("/idem")
-	private Object echo1(FooObject obj) {
-		LOGGER.info("echo1");
-		return new FooObject("asdasd");
 	}
 
 }
