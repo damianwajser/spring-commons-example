@@ -1,7 +1,6 @@
 package com.app.example.controllers;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.app.example.service.FooObjectService;
 import com.github.damianwajser.exceptions.impl.badrequest.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,26 +18,26 @@ public class Controller {
 
 	private final AmazonDynamoDB amazonDynamoDBClient;
 
-	public Controller(RestTemplate restTemplate, AmazonDynamoDB amazonDynamoDBClient, FooObjectService fooObjectService) {
+	public Controller(RestTemplate restTemplate, AmazonDynamoDB amazonDynamoDBClient) {
 		this.restTemplate = restTemplate;
 		this.amazonDynamoDBClient = amazonDynamoDBClient;
 	}
 
 	@GetMapping("/dynamo-tables")
-	private Object getDynamoTables() {
+	public Object getDynamoTables() {
 		//using amazon client
 		return amazonDynamoDBClient.listTables();
 	}
 
 	@GetMapping("/echo")
-	private Object test() {
+	public Object test() {
 		LOGGER.info("echo in service 0");
 		amazonDynamoDBClient.listTables();
 		return restTemplate.getForObject("https://httpbin.org/get", Object.class);
 	}
 
 	@GetMapping("/ex")
-	private Object testex() throws BadRequestException {
-		throw new BadRequestException("", "${message}", Optional.empty());
+	public Object testex() throws BadRequestException {
+		throw new BadRequestException("", "{message}", Optional.empty());
 	}
 }
