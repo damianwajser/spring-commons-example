@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class FooObjectTest extends AbstractTest {
 
-
 	@Test
 	public void createFooObject() throws Exception {
 		FooObject request = new FooObject();
