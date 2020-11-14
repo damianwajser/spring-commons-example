@@ -8,19 +8,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class FooObjectServiceImpl implements FooObjectService {
 
-  private final FooObjectRepository fooObjectRepository;
+	private final FooObjectRepository fooObjectRepository;
 
-  public FooObjectServiceImpl(FooObjectRepository fooObjectRepository) {
-    this.fooObjectRepository = fooObjectRepository;
-  }
+	public FooObjectServiceImpl(FooObjectRepository fooObjectRepository) {
+		this.fooObjectRepository = fooObjectRepository;
+	}
 
-  @Override
-  public void saveFooObject(FooObject fooObject) {
-    fooObjectRepository.save(fooObject);
-  }
+	@Override
+	public FooObject saveFooObject(FooObject fooObject) {
+		return fooObjectRepository.save(fooObject);
+	}
 
-  @Override
-  public Iterable<FooObject> getAll() {
-    return fooObjectRepository.findAll();
-  }
+	@Override
+	public Iterable<FooObject> getAll() {
+		return fooObjectRepository.findAll();
+	}
 }

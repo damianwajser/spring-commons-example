@@ -4,8 +4,8 @@ import com.app.example.model.FooObject;
 
 public interface FooObjectService {
 
-  public void saveFooObject(FooObject fooObject);
+	public FooObject saveFooObject(FooObject fooObject);
 
-  public Iterable<FooObject> getAll();
+	public Iterable<FooObject> getAll();
 
 }

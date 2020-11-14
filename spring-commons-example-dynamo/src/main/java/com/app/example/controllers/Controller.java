@@ -13,32 +13,32 @@ import java.util.Optional;
 
 @RestController
 public class Controller {
-  private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
 
-  private final RestTemplate restTemplate;
+	private final RestTemplate restTemplate;
 
-  private final AmazonDynamoDB amazonDynamoDBClient;
+	private final AmazonDynamoDB amazonDynamoDBClient;
 
-  public Controller(RestTemplate restTemplate, AmazonDynamoDB amazonDynamoDBClient, FooObjectService fooObjectService) {
-    this.restTemplate = restTemplate;
-    this.amazonDynamoDBClient = amazonDynamoDBClient;
-  }
+	public Controller(RestTemplate restTemplate, AmazonDynamoDB amazonDynamoDBClient, FooObjectService fooObjectService) {
+		this.restTemplate = restTemplate;
+		this.amazonDynamoDBClient = amazonDynamoDBClient;
+	}
 
-  @GetMapping("/dynamo-tables")
-  private Object getDynamoTables() {
-    //using amazon client
-    return amazonDynamoDBClient.listTables();
-  }
+	@GetMapping("/dynamo-tables")
+	private Object getDynamoTables() {
+		//using amazon client
+		return amazonDynamoDBClient.listTables();
+	}
 
-  @GetMapping("/echo")
-  private Object test() {
-    LOGGER.info("echo in service 0");
-    amazonDynamoDBClient.listTables();
-    return restTemplate.getForObject("https://httpbin.org/get", Object.class);
-  }
+	@GetMapping("/echo")
+	private Object test() {
+		LOGGER.info("echo in service 0");
+		amazonDynamoDBClient.listTables();
+		return restTemplate.getForObject("https://httpbin.org/get", Object.class);
+	}
 
-  @GetMapping("/ex")
-  private Object testex() throws BadRequestException {
-    throw new BadRequestException("", "${message}", Optional.empty());
-  }
+	@GetMapping("/ex")
+	private Object testex() throws BadRequestException {
+		throw new BadRequestException("", "${message}", Optional.empty());
+	}
 }

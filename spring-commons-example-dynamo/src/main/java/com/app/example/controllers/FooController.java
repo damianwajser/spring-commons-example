@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/fooObjects")
 public class FooController {
 
-    private final FooObjectService fooObjectService;
+	private final FooObjectService fooObjectService;
 
-    public FooController(FooObjectService fooObjectService) {
-        this.fooObjectService = fooObjectService;
-    }
+	public FooController(FooObjectService fooObjectService) {
+		this.fooObjectService = fooObjectService;
+	}
 
-    @PostMapping()
-    private void saveFooObject(@RequestBody FooObject fooObject){
-        fooObjectService.saveFooObject(fooObject);
-    }
+	@PostMapping()
+	public FooObject saveFooObject(@RequestBody FooObject fooObject) {
+		return fooObjectService.saveFooObject(fooObject);
+	}
 
-    @GetMapping()
-    private Iterable<FooObject> getFooObjects(){
-        return fooObjectService.getAll();
-    }
+	@GetMapping()
+	public Iterable<FooObject> getFooObjects() {
+		return fooObjectService.getAll();
+	}
 
 }

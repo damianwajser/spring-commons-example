@@ -8,11 +8,11 @@
 	<packaging>pom</packaging>
 	<name>spring-commons-example-parent</name>
 	<parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.5.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.5.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
 	<properties>
 		<revision>1.15.6</revision>
 		<maven.compiler.source>11</maven.compiler.source>
@@ -67,39 +67,60 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-			<!-- <exclusions> -->
-			<!-- <exclusion> -->
-			<!-- <groupId>org.junit.vintage</groupId> -->
-			<!-- <artifactId>junit-vintage-engine</artifactId> -->
-			<!-- </exclusion> -->
-			<!-- </exclusions> -->
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/pl.project13.maven/git-commit-id-plugin -->
+
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
+			<groupId>com.almworks.sqlite4java</groupId>
+			<artifactId>sqlite4java</artifactId>
+			<version>1.0.392</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
+			<groupId>com.almworks.sqlite4java</groupId>
+			<artifactId>sqlite4java-win32-x86</artifactId>
+			<version>1.0.392</version>
+			<type>dll</type>
 			<scope>test</scope>
 		</dependency>
-		<!-- END TEST -->
+		<dependency>
+			<groupId>com.almworks.sqlite4java</groupId>
+			<artifactId>sqlite4java-win32-x64</artifactId>
+			<version>1.0.392</version>
+			<type>dll</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.almworks.sqlite4java</groupId>
+			<artifactId>libsqlite4java-osx</artifactId>
+			<version>1.0.392</version>
+			<type>dylib</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.almworks.sqlite4java</groupId>
+			<artifactId>libsqlite4java-linux-i386</artifactId>
+			<version>1.0.392</version>
+			<type>so</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.almworks.sqlite4java</groupId>
+			<artifactId>libsqlite4java-linux-amd64</artifactId>
+			<version>1.0.392</version>
+			<type>so</type>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
+				<version>0.8.6</version>
 				<executions>
 					<execution>
 						<goals>
