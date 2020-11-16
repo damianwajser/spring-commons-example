@@ -45,11 +45,28 @@
 			<artifactId>spring-data-dynamodb</artifactId>
 			<version>${spring-data-dynamodb.version}</version>
 		</dependency>
+		<!--utils-->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
 		<!-- ########################################### TESTS #################################################### -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>DynamoDBLocal</artifactId>
 			<version>1.11.86</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.almworks.sqlite4java</groupId>
+			<artifactId>sqlite4java</artifactId>
+			<version>1.0.392</version>
 			<scope>test</scope>
 		</dependency>
 
