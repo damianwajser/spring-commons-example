@@ -13,19 +13,19 @@ import java.util.Optional;
 @RestController
 public class Controller {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
+
 	@Autowired
 	private RestTemplate restTemplate;
 
 
 	@GetMapping("/echo")
-	private Object test() {
+	public Object test() {
 		LOGGER.info("echo en servicio 0");
-		//return restTemplate.getForObject("http://localhost:8081/echo", Object.class);
 		return restTemplate.getForObject("https://httpbin.org/get", Object.class);
 	}
 
 	@GetMapping("/ex")
-	private Object testex() throws BadRequestException {
+	public Object testex() throws BadRequestException {
 		throw new BadRequestException("", "${message}", Optional.empty());
 	}
 

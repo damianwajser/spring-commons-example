@@ -1,0 +1,26 @@
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      group-id: com.github.damianwajser
+test:
+  topic: embedded-test-topic,other-topic
+notifications:
+  send_money:
+    condition: $.type = p2p
+    sender:
+      chanel: push
+    mapping:
+      userid: user en send_money
+      title: ${user.name} le mandaste  ${tx.amount} a $.destinatiion.user_name
+      subtitle: ${user.name} asdasd ${asdasd}
+      footer: ${user.name} asdasd ${asdasd}
+  recived_money:
+    condition: $.type = p2p
+    sender:
+      chanel: push
+    mapping:
+      userid: user en recived_money
+      title: ${user.name} le mandaste  ${tx.amount} a $.destinatiion.user_name
+      subtitle: ${user.name} asdasd ${asdasd}
+      footer: ${user.name} asdasd ${asdasd}

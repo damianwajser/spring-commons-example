@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.UUID;
+
 import static app.example.test.utils.JsonUtils.asJsonString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,6 +21,7 @@ public class FooObjectTest extends AbstractTest {
 		FooObject request = new FooObject();
 		request.setValue("value");
 		mockMvc.perform(post("/fooObjects")
+				.header("X-TRACE-ID", UUID.randomUUID().toString())
 				.content(asJsonString(request))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
