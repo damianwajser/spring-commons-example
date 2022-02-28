@@ -1,6 +1,6 @@
 package notifications.senders;
 
-import notifications.model.Chanel;
+import notifications.model.Channel;
 import notifications.senders.impl.EmailSender;
 import notifications.senders.impl.PushSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,9 @@ public class SenderFactory {
 	@Autowired
 	private EmailSender emailSender;
 
-	public Sender getNotificationSender(Chanel chanel){
+	public Sender getNotificationSender(Channel channel){
 		Sender sender;
-		switch (chanel){
+		switch (channel){
 			case EMAIL: sender = emailSender; break;
 			case PUSH:
 			default: sender = pushSender;

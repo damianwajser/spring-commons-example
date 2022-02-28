@@ -1,5 +1,5 @@
 package notifications.model;
 
-public enum Chanel {
+public enum Channel {
 	PUSH, EMAIL
 }

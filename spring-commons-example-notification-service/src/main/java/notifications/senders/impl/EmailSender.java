@@ -4,7 +4,6 @@ import notifications.model.Notification;
 import notifications.senders.Sender;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class EmailSender implements Sender {
 

@@ -1,5 +1,7 @@
 package notifications.model;
 
+import notifications.configurations.model.SenderConfiguration;
+
 public class Notification {
 
 	private String userid;
@@ -7,6 +9,7 @@ public class Notification {
 	private String subtitle;
 	private String body;
 	private String footer;
+	// each notification have own information to sent
 	private SenderConfiguration sender;
 
 	public String getUserid() {
